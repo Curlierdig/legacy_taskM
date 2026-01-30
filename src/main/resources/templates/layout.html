@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title != null ? title : 'Task Manager'}">Task Manager</title>
+    <link rel="stylesheet" th:href="@{/css/output.css}">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <h1 class="text-3xl font-bold text-gray-900">Task Manager Legacy</h1>
+                <div class="flex items-center gap-4">
+                    <span class="text-gray-700">Usuario: <span class="font-semibold">admin</span></span>
+                    <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
+                        Salir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-1">
+                <a th:href="@{/}" 
+                   class="px-6 py-3 text-white font-medium hover:bg-gray-700 transition-colors"
+                   th:classappend="${#httpServletRequest.requestURI == '/' ? 'bg-gray-700' : ''}">
+                    Tareas
+                </a>
+                <a th:href="@{/proyectos}" 
+                   class="px-6 py-3 text-white font-medium hover:bg-gray-700 transition-colors"
+                   th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/proyectos') ? 'bg-gray-700' : ''}">
+                    Proyectos
+                </a>
+                <a href="#" 
+                   class="px-6 py-3 text-white font-medium hover:bg-gray-700 transition-colors">
+                    Comentarios
+                </a>
+                <a href="#" 
+                   class="px-6 py-3 text-white font-medium hover:bg-gray-700 transition-colors">
+                    Historial
+                </a>
+                <a href="#" 
+                   class="px-6 py-3 text-white font-medium hover:bg-gray-700 transition-colors">
+                    Notificaciones
+                </a>
+                <a th:href="@{/busqueda}" 
+                   class="px-6 py-3 text-white font-medium hover:bg-gray-700 transition-colors"
+                   th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/busqueda') ? 'bg-gray-700' : ''}">
+                    Búsqueda
+                </a>
+                <a href="#" 
+                   class="px-6 py-3 text-white font-medium hover:bg-gray-700 transition-colors">
+                    Reportes
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div th:replace="~{fragments :: flash-messages}"></div>
+        <div th:replace="${content}"></div>
+    </main>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>
