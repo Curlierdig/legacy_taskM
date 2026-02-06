@@ -1,0 +1,69 @@
+/* Custom styles for Task Manager - Bootstrap 5 compatibility */
+
+/* Custom badge colors for status and priority */
+.badge-pendiente {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
+
+.badge-en-progreso {
+    background-color: #0d6efd !important;
+    color: #fff !important;
+}
+
+.badge-completada {
+    background-color: #198754 !important;
+    color: #fff !important;
+}
+
+.badge-prioridad-baja {
+    background-color: #6c757d !important;
+    color: #fff !important;
+}
+
+.badge-prioridad-media {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
+
+.badge-prioridad-alta {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+}
+
+/* Navigation active state */
+.nav-custom .nav-link.active {
+    background-color: #495057 !important;
+}
+
+/* Flash message auto-fade animation */
+.flash-message {
+    animation: fadeOut 5s forwards;
+    animation-delay: 3s;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; display: none; }
+}
+
+/* Statistics text colors */
+.text-orange {
+    color: #fd7e14 !important;
+}
+
+/* Min height for page */
+.min-vh-100 {
+    min-height: 100vh !important;
+}
+
+/* Edit link styling */
+.edit-link {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.edit-link:hover {
+    color: #0a58ca;
+    text-decoration: underline;
+}
