@@ -7,7 +7,7 @@ providers = ["node", "java"]
 [build]
 cmd = """
 npm install
-npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css --minify
+npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./target/classes/static/css/output.css --minify
 ./mvnw clean package -DskipTests
 """
 
