@@ -1,2 +1,6 @@
 [build]
-builder = "NIXPACKS"
+  buildCommand = "npm install && npm run build && ./mvnw clean install -DskipTests"
+
+[deploy]
+  startCommand = "java -jar target/TaskManagerApplication.java"
+  healthcheckPath = "/"
