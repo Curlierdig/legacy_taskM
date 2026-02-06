@@ -8,6 +8,7 @@ import com.taskmanager.repository.TaskRepository;
 import com.taskmanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -24,6 +25,9 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private TaskRepository taskRepository;
     
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
     @Override
     public void run(String... args) throws Exception {
         // Initialize only if database is empty
@@ -33,16 +37,27 @@ public class DataInitializer implements CommandLineRunner {
     }
     
     private void initializeData() {
-        // Create default admin user
-        User admin = new User("admin", "admin", "Administrador");
+        // Create default admin user with encoded password
+        User admin = new User();
+        admin.setUsername("admin");
+        admin.setPassword(passwordEncoder.encode("admin"));
+        admin.setNombre("Administrador");
         admin.setRol("ADMIN");
         userRepository.save(admin);
         
-        // Create sample users
-        User user1 = new User("juan", "password", "Juan Pérez");
+        // Create sample users with encoded passwords
+        User user1 = new User();
+        user1.setUsername("juan");
+        user1.setPassword(passwordEncoder.encode("password"));
+        user1.setNombre("Juan Pérez");
+        user1.setRol("USER");
         userRepository.save(user1);
         
-        User user2 = new User("maria", "password", "María García");
+        User user2 = new User();
+        user2.setUsername("maria");
+        user2.setPassword(passwordEncoder.encode("password"));
+        user2.setNombre("María García");
+        user2.setRol("USER");
         userRepository.save(user2);
         
         // Create sample projects

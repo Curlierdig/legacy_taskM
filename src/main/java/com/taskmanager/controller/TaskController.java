@@ -4,8 +4,11 @@ import com.taskmanager.model.Task;
 import com.taskmanager.service.TaskService;
 import com.taskmanager.service.ProjectService;
 import com.taskmanager.service.UserService;
+import com.taskmanager.service.HistoryService;
+import com.taskmanager.service.NotificationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -27,6 +31,12 @@ public class TaskController {
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private HistoryService historyService;
+    
+    @Autowired
+    private NotificationService notificationService;
     
     @GetMapping
     public String index(Model model) {
@@ -52,14 +62,26 @@ public class TaskController {
     
     @PostMapping("/agregar")
     public String agregarTarea(@Valid @ModelAttribute Task task, 
-                              BindingResult result, 
+                              BindingResult result,
+                              Authentication authentication,
                               RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", "Por favor, complete todos los campos requeridos");
             return "redirect:/";
         }
         
-        taskService.saveTask(task);
+        Task savedTask = taskService.saveTask(task);
+        
+        // Log history
+        String username = authentication.getName();
+        historyService.logTaskAction(savedTask.getId(), savedTask.getTitulo(), "CREATE", username, username);
+        
+        // Notify assigned user if different from creator
+        if (task.getAsignadoA() != null && !task.getAsignadoA().isEmpty() 
+            && !task.getAsignadoA().equals(username)) {
+            notificationService.notifyTaskAssigned(task.getAsignadoA(), task.getTitulo(), savedTask.getId());
+        }
+        
         redirectAttributes.addFlashAttribute("success", "Tarea agregada exitosamente");
         return "redirect:/";
     }
@@ -67,6 +89,7 @@ public class TaskController {
     @PostMapping("/actualizar")
     public String actualizarTarea(@Valid @ModelAttribute Task task,
                                   BindingResult result,
+                                  Authentication authentication,
                                   RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", "Por favor, complete todos los campos requeridos");
@@ -78,19 +101,46 @@ public class TaskController {
             return "redirect:/";
         }
         
-        taskService.saveTask(task);
+        // Get old task to check assignment changes
+        Optional<Task> oldTask = taskService.getTaskById(task.getId());
+        String oldAssignee = oldTask.map(Task::getAsignadoA).orElse(null);
+        
+        Task savedTask = taskService.saveTask(task);
+        
+        // Log history
+        String username = authentication.getName();
+        historyService.logTaskAction(savedTask.getId(), savedTask.getTitulo(), "UPDATE", username, username);
+        
+        // Notify if assignment changed
+        if (task.getAsignadoA() != null && !task.getAsignadoA().isEmpty() 
+            && !task.getAsignadoA().equals(oldAssignee)
+            && !task.getAsignadoA().equals(username)) {
+            notificationService.notifyTaskAssigned(task.getAsignadoA(), task.getTitulo(), savedTask.getId());
+        }
+        
         redirectAttributes.addFlashAttribute("success", "Tarea actualizada exitosamente");
         return "redirect:/";
     }
     
     @PostMapping("/eliminar")
-    public String eliminarTarea(@RequestParam String id, 
+    public String eliminarTarea(@RequestParam String id,
+                               Authentication authentication,
                                RedirectAttributes redirectAttributes) {
         if (id == null || id.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "ID de tarea no válido");
             return "redirect:/";
         }
+        
+        // Get task name before deletion
+        Optional<Task> task = taskService.getTaskById(id);
+        String taskName = task.map(Task::getTitulo).orElse("Desconocida");
+        
         taskService.deleteTask(id);
+        
+        // Log history
+        String username = authentication.getName();
+        historyService.logTaskAction(id, taskName, "DELETE", username, username);
+        
         redirectAttributes.addFlashAttribute("success", "Tarea eliminada exitosamente");
         return "redirect:/";
     }

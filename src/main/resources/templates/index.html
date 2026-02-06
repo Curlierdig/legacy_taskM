@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,10 +16,10 @@
             <div class="d-flex justify-content-between align-items-center py-3">
                 <h1 class="h3 fw-bold text-dark mb-0">Task Manager Legacy</h1>
                 <div class="d-flex align-items-center gap-3">
-                    <span class="text-secondary">Usuario: <span class="fw-semibold">admin</span></span>
-                    <button class="btn btn-danger btn-sm">
-                        Salir
-                    </button>
+                    <span class="text-secondary">Usuario: <span class="fw-semibold" sec:authentication="name">usuario</span></span>
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Salir</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -35,19 +36,19 @@
                     <a th:href="@{/proyectos}" class="nav-link text-white">Proyectos</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link text-white">Comentarios</a>
+                    <a th:href="@{/comentarios}" class="nav-link text-white">Comentarios</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link text-white">Historial</a>
+                    <a th:href="@{/historial}" class="nav-link text-white">Historial</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link text-white">Notificaciones</a>
+                    <a th:href="@{/notificaciones}" class="nav-link text-white">Notificaciones</a>
                 </li>
                 <li class="nav-item">
                     <a th:href="@{/busqueda}" class="nav-link text-white">Búsqueda</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link text-white">Reportes</a>
+                    <a th:href="@{/reportes}" class="nav-link text-white">Reportes</a>
                 </li>
             </ul>
         </div>
