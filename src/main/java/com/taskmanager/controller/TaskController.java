@@ -145,11 +145,16 @@ public class TaskController {
         return "redirect:/";
     }
     
-    @GetMapping("/editar/{id}")
-    public String editarTarea(@PathVariable String id, Model model) {
-        Task task = taskService.getTaskById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Tarea no encontrada: " + id));
+    @GetMapping(value = "/editar/{id}", produces = "text/html")
+    public String editarTarea(@PathVariable String id, Model model, RedirectAttributes redirectAttributes) {
+        Optional<Task> taskOpt = taskService.getTaskById(id);
         
+        if (taskOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Tarea no encontrada: " + id);
+            return "redirect:/";
+        }
+        
+        Task task = taskOpt.get();
         model.addAttribute("task", task);
         model.addAttribute("tasks", taskService.getAllTasks());
         model.addAttribute("projects", projectService.getAllProjects());
@@ -170,3 +175,4 @@ public class TaskController {
         return "index";
     }
 }
+
