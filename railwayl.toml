@@ -2,14 +2,14 @@
 builder = "NIXPACKS"
 
 [build.nixpacksConfig]
-providers = ["java", "node"]
+providers = ["node", "java"]
 
-[build.commands]
-build = [
-  "npm install",
-  "npm run build:css",
-  "./mvnw clean package -DskipTests"
-]
+[build]
+cmd = """
+npm install
+npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css --minify
+./mvnw clean package -DskipTests
+"""
 
 [deploy]
 startCommand = "java -jar target/*.jar"
