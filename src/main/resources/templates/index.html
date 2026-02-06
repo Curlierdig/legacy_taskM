@@ -260,11 +260,10 @@
                                           th:text="${task.estado.displayName}"></span>
                                 </td>
                                 <td class="text-nowrap">
-                                    <span th:switch="${task.prioridad}" class="badge">
-                                        <span th:case="'BAJA'" class="badge badge-prioridad-baja" th:text="${task.prioridad.displayName}"></span>
-                                        <span th:case="'MEDIA'" class="badge badge-prioridad-media" th:text="${task.prioridad.displayName}"></span>
-                                        <span th:case="'ALTA'" class="badge badge-prioridad-alta" th:text="${task.prioridad.displayName}"></span>
-                                    </span>
+                                    <span th:if="${task.prioridad != null and task.prioridad.name() == 'BAJA'}" class="badge badge-prioridad-baja" th:text="${task.prioridad.displayName}"></span>
+                                    <span th:if="${task.prioridad != null and task.prioridad.name() == 'MEDIA'}" class="badge badge-prioridad-media" th:text="${task.prioridad.displayName}"></span>
+                                    <span th:if="${task.prioridad != null and task.prioridad.name() == 'ALTA'}" class="badge badge-prioridad-alta" th:text="${task.prioridad.displayName}"></span>
+                                    <span th:if="${task.prioridad == null}">-</span>
                                 </td>
                                 <td th:text="${task.proyecto != null ? task.proyecto : '-'}"></td>
                                 <td th:text="${task.asignadoA != null && !task.asignadoA.isEmpty() ? task.asignadoA : 'Sin asignar'}"></td>
