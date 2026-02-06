@@ -33,6 +33,20 @@ public class ProjectService {
         projectRepository.deleteById(id);
     }
     
+    public Project updateProject(String id, Project project) {
+        Optional<Project> existingProject = projectRepository.findById(id);
+        if (existingProject.isEmpty()) {
+            throw new IllegalArgumentException("Proyecto no encontrado con ID: " + id);
+        }
+        
+        Project updatedProject = existingProject.get();
+        updatedProject.setNombre(project.getNombre());
+        updatedProject.setDescripcion(project.getDescripcion());
+        // Mantener la fecha de creación original
+        
+        return projectRepository.save(updatedProject);
+    }
+    
     public Project findByNombre(String nombre) {
         return projectRepository.findByNombre(nombre);
     }

@@ -38,8 +38,42 @@ public class ProjectController {
         return "redirect:/proyectos";
     }
     
-    @PostMapping("/eliminar/{id}")
-    public String eliminarProyecto(@PathVariable String id, RedirectAttributes redirectAttributes) {
+    @PostMapping("/actualizar")
+    public String actualizarProyecto(@Valid @ModelAttribute Project project,
+                                     BindingResult result,
+                                     RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Por favor, complete todos los campos requeridos");
+            return "redirect:/proyectos";
+        }
+        
+        if (project.getId() == null || project.getId().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "ID de proyecto no válido");
+            return "redirect:/proyectos";
+        }
+        
+        projectService.updateProject(project.getId(), project);
+        redirectAttributes.addFlashAttribute("success", "Proyecto actualizado exitosamente");
+        return "redirect:/proyectos";
+    }
+    
+    @GetMapping("/editar/{id}")
+    public String editarProyecto(@PathVariable String id, Model model) {
+        Project project = projectService.getProjectById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Proyecto no encontrado: " + id));
+        
+        model.addAttribute("project", project);
+        model.addAttribute("projects", projectService.getAllProjects());
+        return "proyectos";
+    }
+    
+    @PostMapping("/eliminar")
+    public String eliminarProyecto(@RequestParam String id, RedirectAttributes redirectAttributes) {
+        if (id == null || id.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "ID de proyecto no válido");
+            return "redirect:/proyectos";
+        }
+        
         projectService.deleteProject(id);
         redirectAttributes.addFlashAttribute("success", "Proyecto eliminado exitosamente");
         return "redirect:/proyectos";

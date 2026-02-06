@@ -1,0 +1,15 @@
+[build]
+builder = "NIXPACKS"
+
+[build.nixpacksConfig]
+providers = ["java", "node"]
+
+[build.commands]
+build = [
+  "npm install",
+  "npm run build:css",
+  "./mvnw clean package -DskipTests"
+]
+
+[deploy]
+startCommand = "java -jar target/*.jar"
