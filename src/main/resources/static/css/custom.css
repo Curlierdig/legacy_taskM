@@ -43,10 +43,16 @@
 
 /* ==================== BASE STYLES ==================== */
 body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    /* Font stack with similar metrics to reduce CLS */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
     background-color: var(--tm-bg) !important;
     color: var(--tm-text);
     min-height: 100vh;
+    /* Prevent layout shift */
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* ==================== HEADER ==================== */
