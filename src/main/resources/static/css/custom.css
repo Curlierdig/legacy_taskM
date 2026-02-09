@@ -1,42 +1,523 @@
-/* Custom styles for Task Manager - Bootstrap 5 compatibility */
+/* Task Manager - Enterprise SaaS Design System */
+/* Inspired by Linear/Notion - Dark, minimal, professional */
 
-/* Custom badge colors for status and priority */
+/* ==================== DESIGN TOKENS ==================== */
+:root {
+    /* Background colors */
+    --tm-bg: #0a0a0a;
+    --tm-bg-elevated: #141414;
+    --tm-bg-hover: #1a1a1a;
+    --tm-bg-input: #1a1a1a;
+    
+    /* Border colors */
+    --tm-border: #262626;
+    --tm-border-hover: #404040;
+    
+    /* Text colors */
+    --tm-text: #fafafa;
+    --tm-text-secondary: #a3a3a3;
+    --tm-text-muted: #737373;
+    
+    /* Accent colors */
+    --tm-accent: #3b82f6;
+    --tm-accent-hover: #2563eb;
+    --tm-accent-muted: rgba(59, 130, 246, 0.15);
+    
+    /* Semantic colors */
+    --tm-success: #10b981;
+    --tm-success-muted: rgba(16, 185, 129, 0.15);
+    --tm-warning: #f59e0b;
+    --tm-warning-muted: rgba(245, 158, 11, 0.15);
+    --tm-danger: #ef4444;
+    --tm-danger-muted: rgba(239, 68, 68, 0.15);
+    --tm-info: #06b6d4;
+    --tm-info-muted: rgba(6, 182, 212, 0.15);
+    
+    /* Spacing */
+    --tm-radius: 8px;
+    --tm-radius-lg: 12px;
+    
+    /* Transitions */
+    --tm-transition: all 0.15s ease;
+}
+
+/* ==================== BASE STYLES ==================== */
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--tm-bg) !important;
+    color: var(--tm-text);
+    min-height: 100vh;
+}
+
+/* ==================== HEADER ==================== */
+.tm-header {
+    background-color: var(--tm-bg) !important;
+    border-bottom: 1px solid var(--tm-border);
+}
+
+.tm-header h1 {
+    font-weight: 600;
+    font-size: 1.25rem;
+    letter-spacing: -0.025em;
+}
+
+/* ==================== NAVIGATION ==================== */
+.tm-nav {
+    background-color: var(--tm-bg) !important;
+    border-bottom: 1px solid var(--tm-border);
+    padding: 0;
+}
+
+.tm-nav .nav-link {
+    color: var(--tm-text-secondary) !important;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    transition: var(--tm-transition);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+}
+
+.tm-nav .nav-link:hover {
+    color: var(--tm-text) !important;
+    background-color: transparent;
+}
+
+.tm-nav .nav-link.active {
+    color: var(--tm-text) !important;
+    background-color: transparent !important;
+    border-bottom-color: var(--tm-accent);
+}
+
+/* ==================== CARDS ==================== */
+.tm-card {
+    background-color: var(--tm-bg-elevated) !important;
+    border: 1px solid var(--tm-border) !important;
+    border-radius: var(--tm-radius-lg) !important;
+    box-shadow: none !important;
+}
+
+.tm-card .card-body {
+    padding: 1.5rem;
+}
+
+.tm-card-header {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--tm-text);
+    letter-spacing: -0.025em;
+}
+
+/* ==================== FORMS ==================== */
+.form-label {
+    color: var(--tm-text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-control,
+.form-select {
+    background-color: var(--tm-bg-input) !important;
+    border: 1px solid var(--tm-border) !important;
+    color: var(--tm-text) !important;
+    border-radius: var(--tm-radius);
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    transition: var(--tm-transition);
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--tm-bg-input) !important;
+    border-color: var(--tm-accent) !important;
+    box-shadow: 0 0 0 3px var(--tm-accent-muted) !important;
+    color: var(--tm-text) !important;
+}
+
+.form-control::placeholder {
+    color: var(--tm-text-muted);
+}
+
+/* ==================== BUTTONS ==================== */
+.btn {
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--tm-radius);
+    transition: var(--tm-transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background-color: var(--tm-accent) !important;
+    border-color: var(--tm-accent) !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--tm-accent-hover) !important;
+    border-color: var(--tm-accent-hover) !important;
+}
+
+.btn-success {
+    background-color: var(--tm-success) !important;
+    border-color: var(--tm-success) !important;
+}
+
+.btn-success:hover {
+    background-color: #059669 !important;
+    border-color: #059669 !important;
+}
+
+.btn-danger {
+    background-color: var(--tm-danger) !important;
+    border-color: var(--tm-danger) !important;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626 !important;
+    border-color: #dc2626 !important;
+}
+
+.btn-secondary {
+    background-color: var(--tm-bg-hover) !important;
+    border-color: var(--tm-border) !important;
+    color: var(--tm-text) !important;
+}
+
+.btn-secondary:hover {
+    background-color: var(--tm-border) !important;
+    border-color: var(--tm-border-hover) !important;
+}
+
+.btn-outline-primary {
+    color: var(--tm-accent) !important;
+    border-color: var(--tm-border) !important;
+    background-color: transparent !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary.active {
+    background-color: var(--tm-accent-muted) !important;
+    border-color: var(--tm-accent) !important;
+    color: var(--tm-accent) !important;
+}
+
+.btn-outline-secondary {
+    color: var(--tm-text-secondary) !important;
+    border-color: var(--tm-border) !important;
+    background-color: transparent !important;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary.active {
+    background-color: var(--tm-bg-hover) !important;
+    border-color: var(--tm-border-hover) !important;
+    color: var(--tm-text) !important;
+}
+
+.btn-outline-success {
+    color: var(--tm-success) !important;
+    border-color: var(--tm-border) !important;
+}
+
+.btn-outline-success:hover {
+    background-color: var(--tm-success-muted) !important;
+    border-color: var(--tm-success) !important;
+    color: var(--tm-success) !important;
+}
+
+.btn-outline-danger {
+    color: var(--tm-danger) !important;
+    border-color: var(--tm-border) !important;
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--tm-danger-muted) !important;
+    border-color: var(--tm-danger) !important;
+    color: var(--tm-danger) !important;
+}
+
+.btn-link {
+    color: var(--tm-text-secondary) !important;
+    text-decoration: none !important;
+}
+
+.btn-link:hover {
+    color: var(--tm-text) !important;
+}
+
+.btn-link.text-danger {
+    color: var(--tm-danger) !important;
+}
+
+.btn-link.text-danger:hover {
+    color: #f87171 !important;
+}
+
+/* ==================== TABLES ==================== */
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--tm-text);
+    --bs-table-border-color: var(--tm-border);
+    margin-bottom: 0;
+}
+
+.table thead th {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: lowercase;
+    letter-spacing: 0.025em;
+    color: var(--tm-text-muted) !important;
+    background-color: var(--tm-bg) !important;
+    border-bottom: 1px solid var(--tm-border) !important;
+    padding: 0.75rem 1rem;
+    white-space: nowrap;
+}
+
+.table tbody td {
+    padding: 0.875rem 1rem;
+    vertical-align: middle;
+    color: var(--tm-text-secondary);
+    border-bottom: 1px solid var(--tm-border);
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--tm-bg-hover) !important;
+}
+
+.table-hover tbody tr:hover td {
+    color: var(--tm-text);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: transparent;
+}
+
+/* ==================== BADGES ==================== */
+.badge {
+    font-weight: 500;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 9999px;
+}
+
+/* Status badges */
 .badge-pendiente {
-    background-color: #ffc107 !important;
-    color: #212529 !important;
+    background-color: var(--tm-warning-muted) !important;
+    color: var(--tm-warning) !important;
 }
 
 .badge-en-progreso {
-    background-color: #0d6efd !important;
-    color: #fff !important;
+    background-color: var(--tm-accent-muted) !important;
+    color: var(--tm-accent) !important;
 }
 
 .badge-completada {
-    background-color: #198754 !important;
-    color: #fff !important;
+    background-color: var(--tm-success-muted) !important;
+    color: var(--tm-success) !important;
 }
 
+/* Priority badges */
 .badge-prioridad-baja {
-    background-color: #6c757d !important;
-    color: #fff !important;
+    background-color: rgba(115, 115, 115, 0.15) !important;
+    color: var(--tm-text-muted) !important;
 }
 
 .badge-prioridad-media {
-    background-color: #ffc107 !important;
-    color: #212529 !important;
+    background-color: var(--tm-warning-muted) !important;
+    color: var(--tm-warning) !important;
 }
 
 .badge-prioridad-alta {
-    background-color: #dc3545 !important;
-    color: #fff !important;
+    background-color: var(--tm-danger-muted) !important;
+    color: var(--tm-danger) !important;
 }
 
-/* Navigation active state */
-.nav-custom .nav-link.active {
-    background-color: #495057 !important;
+/* General badge colors */
+.bg-primary {
+    background-color: var(--tm-accent-muted) !important;
+    color: var(--tm-accent) !important;
 }
 
-/* Flash message auto-fade animation */
+.bg-success {
+    background-color: var(--tm-success-muted) !important;
+    color: var(--tm-success) !important;
+}
+
+.bg-warning {
+    background-color: var(--tm-warning-muted) !important;
+    color: var(--tm-warning) !important;
+}
+
+.bg-danger {
+    background-color: var(--tm-danger-muted) !important;
+    color: var(--tm-danger) !important;
+}
+
+.bg-info {
+    background-color: var(--tm-info-muted) !important;
+    color: var(--tm-info) !important;
+}
+
+/* ==================== ALERTS ==================== */
+.alert {
+    border-radius: var(--tm-radius);
+    border: 1px solid;
+    font-size: 0.875rem;
+}
+
+.alert-success {
+    background-color: var(--tm-success-muted) !important;
+    border-color: var(--tm-success) !important;
+    color: var(--tm-success) !important;
+}
+
+.alert-danger {
+    background-color: var(--tm-danger-muted) !important;
+    border-color: var(--tm-danger) !important;
+    color: var(--tm-danger) !important;
+}
+
+.alert .btn-close {
+    filter: invert(1);
+    opacity: 0.5;
+}
+
+/* ==================== LIST GROUPS ==================== */
+.list-group-item {
+    background-color: var(--tm-bg-elevated);
+    border-color: var(--tm-border);
+    color: var(--tm-text);
+    padding: 1rem 1.25rem;
+}
+
+.list-group-item:first-child {
+    border-top-left-radius: var(--tm-radius);
+    border-top-right-radius: var(--tm-radius);
+}
+
+.list-group-item:last-child {
+    border-bottom-left-radius: var(--tm-radius);
+    border-bottom-right-radius: var(--tm-radius);
+}
+
+.list-group-item-primary {
+    background-color: var(--tm-accent-muted) !important;
+    border-left: 3px solid var(--tm-accent);
+}
+
+/* ==================== STAT CARDS ==================== */
+.tm-stat-card {
+    background-color: var(--tm-bg-elevated) !important;
+    border: 1px solid var(--tm-border) !important;
+    border-radius: var(--tm-radius-lg) !important;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.tm-stat-card.stat-primary {
+    border-left: 3px solid var(--tm-accent);
+}
+
+.tm-stat-card.stat-success {
+    border-left: 3px solid var(--tm-success);
+}
+
+.tm-stat-card.stat-warning {
+    border-left: 3px solid var(--tm-warning);
+}
+
+.tm-stat-card.stat-danger {
+    border-left: 3px solid var(--tm-danger);
+}
+
+.tm-stat-value {
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: var(--tm-text);
+}
+
+.tm-stat-label {
+    font-size: 0.8125rem;
+    color: var(--tm-text-muted);
+    margin-top: 0.25rem;
+}
+
+/* ==================== LINKS ==================== */
+a {
+    color: var(--tm-accent);
+    text-decoration: none;
+    transition: var(--tm-transition);
+}
+
+a:hover {
+    color: var(--tm-accent-hover);
+}
+
+.edit-link {
+    color: var(--tm-accent) !important;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.edit-link:hover {
+    color: var(--tm-accent-hover) !important;
+}
+
+/* ==================== UTILITIES ==================== */
+.text-secondary {
+    color: var(--tm-text-secondary) !important;
+}
+
+.text-muted {
+    color: var(--tm-text-muted) !important;
+}
+
+.text-success {
+    color: var(--tm-success) !important;
+}
+
+.text-warning {
+    color: var(--tm-warning) !important;
+}
+
+.text-danger {
+    color: var(--tm-danger) !important;
+}
+
+.text-orange {
+    color: var(--tm-warning) !important;
+}
+
+.text-info {
+    color: var(--tm-info) !important;
+}
+
+.text-dark {
+    color: var(--tm-text) !important;
+}
+
+.border-top {
+    border-color: var(--tm-border) !important;
+}
+
+.shadow-sm {
+    box-shadow: none !important;
+}
+
+/* Min height for page */
+.min-vh-100 {
+    min-height: 100vh !important;
+}
+
+/* Flash message animation */
 .flash-message {
     animation: fadeOut 5s forwards;
     animation-delay: 3s;
@@ -47,23 +528,63 @@
     to { opacity: 0; display: none; }
 }
 
-/* Statistics text colors */
-.text-orange {
-    color: #fd7e14 !important;
+/* ==================== AUTH PAGES ==================== */
+.tm-auth-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding-top: 10vh;
 }
 
-/* Min height for page */
-.min-vh-100 {
-    min-height: 100vh !important;
+.tm-auth-card {
+    background-color: var(--tm-bg-elevated) !important;
+    border: 1px solid var(--tm-border) !important;
+    border-radius: var(--tm-radius-lg) !important;
 }
 
-/* Edit link styling */
-.edit-link {
-    color: #0d6efd;
-    text-decoration: none;
+.tm-auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
 }
 
-.edit-link:hover {
-    color: #0a58ca;
-    text-decoration: underline;
+.tm-auth-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--tm-text);
+    letter-spacing: -0.025em;
+}
+
+.tm-auth-header p {
+    color: var(--tm-text-muted);
+    margin-top: 0.5rem;
+}
+
+/* ==================== EMPTY STATES ==================== */
+.tm-empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--tm-text-muted);
+}
+
+.tm-empty-state i {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+    .tm-nav .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8125rem;
+    }
+    
+    .table thead th,
+    .table tbody td {
+        padding: 0.625rem 0.5rem;
+        font-size: 0.8125rem;
+    }
+    
+    .tm-card .card-body {
+        padding: 1rem;
+    }
 }
