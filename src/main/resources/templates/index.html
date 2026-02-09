@@ -105,7 +105,7 @@
                 </h2>
                 
                 <!-- New/Edit Task Form -->
-                <form th:action="@{/agregar}" th:object="${task}" method="post">
+                <form id="taskForm" th:action="@{/agregar}" th:object="${task}" method="post">
                     <input type="hidden" th:field="*{id}" id="taskId">
                     
                     <div class="row g-4">
@@ -236,19 +236,12 @@
                             Agregar
                         </button>
                         <button type="submit" 
-                                formaction="/actualizar"
+                                th:formaction="@{/actualizar}"
                                 class="btn btn-success">
                             <i class="bi bi-check-lg"></i>
                             Actualizar
                         </button>
-                        <button type="submit" 
-                                formaction="/eliminar"
-                                formmethod="post"
-                                onclick="return confirm('¿Está seguro de que desea eliminar esta tarea?');"
-                                class="btn btn-danger">
-                            <i class="bi bi-trash"></i>
-                            Eliminar
-                        </button>
+
                         <button type="button" 
                                 onclick="clearForm()"
                                 class="btn btn-secondary">
@@ -310,11 +303,13 @@
                                 <td class="text-nowrap" 
                                     th:text="${task.fechaVencimiento != null ? #temporals.format(task.fechaVencimiento, 'dd/MM/yyyy') : '-'}"></td>
                                 <td class="text-nowrap">
-                                    <a th:href="@{/editar/{id}(id=${task.id})}" 
+                                    <a th:if="${task.id != null and !task.id.isEmpty()}"
+                                       th:href="@{/editar/{id}(id=${task.id})}" 
                                        class="edit-link">
                                         <i class="bi bi-pencil"></i>
                                         Editar
                                     </a>
+                                    <span th:if="${task.id == null or task.id.isEmpty()}" class="text-muted">-</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -366,26 +361,6 @@
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script th:src="@{/js/main.js}"></script>
-    <script>
-        function deleteTask() {
-            const taskId = document.getElementById('taskId').value;
-            if (!taskId || taskId === '') {
-                alert('Por favor, seleccione una tarea para eliminar');
-                return;
-            }
-            if (confirm('¿Está seguro de que desea eliminar esta tarea?')) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '/eliminar';
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'id';
-                input.value = taskId;
-                form.appendChild(input);
-                document.body.appendChild(form);
-                form.submit();
-            }
-        }
-    </script>
+
 </body>
 </html>

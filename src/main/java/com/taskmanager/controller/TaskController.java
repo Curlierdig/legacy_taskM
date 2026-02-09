@@ -70,6 +70,11 @@ public class TaskController {
             return "redirect:/";
         }
         
+        // Clear empty ID so MongoDB can auto-generate ObjectId
+        if (task.getId() != null && task.getId().isEmpty()) {
+            task.setId(null);
+        }
+        
         Task savedTask = taskService.saveTask(task);
         
         // Log history
@@ -145,7 +150,7 @@ public class TaskController {
         return "redirect:/";
     }
     
-    @GetMapping(value = "/editar/{id}", produces = "text/html")
+    @GetMapping("/editar/{id}")
     public String editarTarea(@PathVariable String id, Model model, RedirectAttributes redirectAttributes) {
         Optional<Task> taskOpt = taskService.getTaskById(id);
         
