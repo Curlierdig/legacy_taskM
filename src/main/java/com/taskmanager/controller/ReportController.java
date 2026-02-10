@@ -1,10 +1,14 @@
 package com.taskmanager.controller;
 
 import com.taskmanager.model.Task;
+import com.taskmanager.service.CsvExportService;
 import com.taskmanager.service.ProjectService;
 import com.taskmanager.service.TaskService;
 import com.taskmanager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +31,9 @@ public class ReportController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CsvExportService csvExportService;
 
     @GetMapping
     public String showReports(Model model) {
@@ -73,5 +80,41 @@ public class ReportController {
         model.addAttribute("totalUsers", userService.getAllUsers().size());
         
         return "reportes";
+    }
+
+    @GetMapping("/exportar/tareas")
+    public ResponseEntity<byte[]> exportTasksCsv() {
+        byte[] csvData = csvExportService.exportTasksCsv();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=reporte_tareas.csv")
+                .contentType(MediaType.parseMediaType("text/csv; charset=UTF-8"))
+                .body(csvData);
+    }
+
+    @GetMapping("/exportar/proyectos")
+    public ResponseEntity<byte[]> exportProjectsCsv() {
+        byte[] csvData = csvExportService.exportProjectsCsv();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=reporte_proyectos.csv")
+                .contentType(MediaType.parseMediaType("text/csv; charset=UTF-8"))
+                .body(csvData);
+    }
+
+    @GetMapping("/exportar/tareas-por-proyecto")
+    public ResponseEntity<byte[]> exportTasksByProjectCsv() {
+        byte[] csvData = csvExportService.exportTasksByProjectCsv();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=reporte_tareas_por_proyecto.csv")
+                .contentType(MediaType.parseMediaType("text/csv; charset=UTF-8"))
+                .body(csvData);
+    }
+
+    @GetMapping("/exportar/tareas-por-usuario")
+    public ResponseEntity<byte[]> exportTasksByUserCsv() {
+        byte[] csvData = csvExportService.exportTasksByUserCsv();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=reporte_tareas_por_usuario.csv")
+                .contentType(MediaType.parseMediaType("text/csv; charset=UTF-8"))
+                .body(csvData);
     }
 }
