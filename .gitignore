@@ -32,12 +32,7 @@ application-dev.properties
 *.log
 logs/
 
-# Node
-node_modules/
-package-lock.json
 
-# TailwindCSS
-src/main/resources/static/css/output.css
 
 # Environment Variables (secrets)
 .env

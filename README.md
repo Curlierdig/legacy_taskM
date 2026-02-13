@@ -1,6 +1,6 @@
 # Task Manager
 
-A modern task and project management web application built with **Spring Boot 3.2**, **MongoDB**, **Thymeleaf**, and **TailwindCSS**. Features include authentication with Spring Security, user roles, change history, notifications, per-task comments, CSV export, and a reports dashboard.
+A modern task and project management web application built with **Spring Boot 3.2**, **MongoDB**, **Thymeleaf**, and **Bootstrap 5.3.3**. Features include authentication with Spring Security, user roles, change history, notifications, per-task comments, CSV export, and a reports dashboard.
 
 ---
 
@@ -27,7 +27,6 @@ A modern task and project management web application built with **Spring Boot 3.
 | **Java JDK** | 17+ | JDK 21 recommended |
 | **Maven** | — | Included as Maven Wrapper (`mvnw` / `mvnw.cmd`) |
 | **MongoDB** | 6.0+ | Via Docker Compose, local install, or MongoDB Atlas (cloud) |
-| **Node.js + npm** | 18+ | Only needed to recompile TailwindCSS |
 | **Docker** *(optional)* | 20+ | To run MongoDB with `docker-compose` |
 
 ---
@@ -74,15 +73,7 @@ Set your Atlas URI in the `.env` file. No local installation required.
 
 Start the MongoDB service according to your operating system.
 
-### 4. Install frontend dependencies *(optional)*
-
-Only needed if you plan to modify CSS styles:
-
-```bash
-npm install
-```
-
-### 5. Run the application
+### 4. Run the application
 
 ```bash
 # Windows
@@ -126,13 +117,12 @@ Sample users are created automatically on first run:
 │   │   │   └── TaskManagerApplication.java
 │   │   └── resources/
 │   │       ├── static/
-│   │       │   ├── css/         # TailwindCSS (input.css -> output.css)
+│   │       │   ├── css/         # Custom stylesheets
 │   │       │   └── js/          # Frontend JavaScript
 │   │       ├── templates/       # Thymeleaf templates (.html)
 │   │       └── application.properties
 ├── docker-compose.yml           # MongoDB via Docker
 ├── pom.xml                      # Maven dependencies
-├── package.json                 # npm dependencies (TailwindCSS)
 ├── .env.template                # Environment variable template
 └── .env                         # Environment variables (not versioned)
 ```
@@ -178,12 +168,6 @@ Sample users are created automatically on first run:
 
 # Build for production
 .\mvnw.cmd clean package -DskipTests
-
-# Build TailwindCSS
-npm run build:css
-
-# TailwindCSS watch mode (development)
-npm run dev:css
 
 # Start MongoDB with Docker
 docker-compose up -d

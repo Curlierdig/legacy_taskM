@@ -1,5 +1,5 @@
 [build]
-  buildCommand = "npm install && npm run build && ./mvnw clean install -DskipTests"
+  buildCommand = "./mvnw clean install -DskipTests"
 
 [deploy]
   startCommand = "java -jar target/TaskManagerApplication.java"
