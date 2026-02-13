@@ -1,6 +1,6 @@
 # Task Manager
 
-A modern task and project management web application built with **Spring Boot 3.2**, **MongoDB**, **Thymeleaf**, and **Bootstrap 5.3.3**. Features include authentication with Spring Security, user roles, change history, notifications, per-task comments, CSV export, and a reports dashboard.
+A modern task and project management web application built with **Spring Boot 3.2**, **MongoDB Atlas**, **Thymeleaf**, and **Bootstrap 5.3.3**. Features include authentication with Spring Security, user roles, change history, notifications, per-task comments, CSV export, and a reports dashboard.
 
 ---
 
@@ -26,12 +26,12 @@ A modern task and project management web application built with **Spring Boot 3.
 |---|---|---|
 | **Java JDK** | 17+ | JDK 21 recommended |
 | **Maven** | — | Included as Maven Wrapper (`mvnw` / `mvnw.cmd`) |
-| **MongoDB** | 6.0+ | Via Docker Compose, local install, or MongoDB Atlas (cloud) |
-| **Docker** *(optional)* | 20+ | To run MongoDB with `docker-compose` |
+
+> MongoDB Atlas is pre-configured in `application.properties`. No local database installation is required.
 
 ---
 
-## Local Setup
+## Quick Start
 
 ### 1. Clone the repository
 
@@ -40,40 +40,7 @@ git clone <REPO_URL>
 cd task-manager
 ```
 
-### 2. Configure environment variables
-
-Copy the template and fill in your values:
-
-```bash
-cp .env.template .env
-```
-
-Edit `.env` with your MongoDB connection string:
-
-```env
-MONGODB_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/<database>
-SERVER_PORT=8080
-```
-
-> **Important:** The `.env` file contains credentials and **must never be committed to Git**. It is already listed in `.gitignore`.
-
-### 3. Start MongoDB
-
-**Option A — Docker Compose (recommended):**
-
-```bash
-docker-compose up -d
-```
-
-**Option B — MongoDB Atlas (cloud):**
-
-Set your Atlas URI in the `.env` file. No local installation required.
-
-**Option C — Local installation:**
-
-Start the MongoDB service according to your operating system.
-
-### 4. Run the application
+### 2. Run the application
 
 ```bash
 # Windows
@@ -84,6 +51,8 @@ Start the MongoDB service according to your operating system.
 ```
 
 The application will be available at: **http://localhost:8080**
+
+That's it. The project connects to MongoDB Atlas automatically.
 
 ---
 
@@ -111,20 +80,18 @@ Sample users are created automatically on first run:
 │   │   │   ├── controller/      # MVC Controllers (Thymeleaf)
 │   │   │   ├── controller/rest/ # REST API Controllers
 │   │   │   ├── exception/       # GlobalExceptionHandler
-│   │   │   ├── model/           # MongoDB Entities (Task, Project, User…)
+│   │   │   ├── model/           # MongoDB Entities (Task, Project, User...)
 │   │   │   ├── repository/      # Spring Data MongoDB Repositories
 │   │   │   ├── service/         # Business Logic
 │   │   │   └── TaskManagerApplication.java
 │   │   └── resources/
 │   │       ├── static/
-│   │       │   ├── css/         # Custom stylesheets
+│   │       │   ├── css/         # Custom stylesheets (Bootstrap)
 │   │       │   └── js/          # Frontend JavaScript
 │   │       ├── templates/       # Thymeleaf templates (.html)
 │   │       └── application.properties
-├── docker-compose.yml           # MongoDB via Docker
 ├── pom.xml                      # Maven dependencies
-├── .env.template                # Environment variable template
-└── .env                         # Environment variables (not versioned)
+└── railwayl.toml                # Railway deployment config
 ```
 
 ---
@@ -159,31 +126,29 @@ Sample users are created automatically on first run:
 
 ---
 
-## Available Scripts
+## Available Commands
 
 ```bash
-# Start the application (development)
+# Start the application
 .\mvnw.cmd spring-boot:run          # Windows
 ./mvnw spring-boot:run              # Linux/macOS
 
-# Build for production
+# Build JAR for production
 .\mvnw.cmd clean package -DskipTests
 
-# Start MongoDB with Docker
-docker-compose up -d
-
-# Stop MongoDB
-docker-compose down
+# Run the built JAR
+java -jar target/task-manager-1.0.0.jar
 ```
 
 ---
 
-## Deployment
+## Deployment (Railway)
 
-The project includes a **Railway** configuration (`railwayl.toml`). To deploy:
+The project includes a Railway configuration (`railwayl.toml`):
 
-1. Set the `MONGODB_URI` environment variable in the Railway dashboard.
-2. Railway will automatically build and deploy using the configured commands.
+1. Push the repository to GitHub.
+2. Connect the repo to Railway.
+3. Railway will build and deploy automatically.
 
 ---
 
