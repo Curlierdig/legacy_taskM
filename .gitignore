@@ -39,6 +39,9 @@ package-lock.json
 # TailwindCSS
 src/main/resources/static/css/output.css
 
+# Environment Variables (secrets)
+.env
+
 # OS
 .DS_Store
 Thumbs.db

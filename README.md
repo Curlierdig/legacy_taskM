@@ -1,172 +1,207 @@
-# Task Manager - Modern Spring Boot Application
+# Task Manager
 
-A modern task management application built with Spring Boot, MongoDB, and TailwindCSS.
+A modern task and project management web application built with **Spring Boot 3.2**, **MongoDB**, **Thymeleaf**, and **TailwindCSS**. Features include authentication with Spring Security, user roles, change history, notifications, per-task comments, CSV export, and a reports dashboard.
 
-## Tech Stack
-
-- **Backend**: Java 17+, Spring Boot 3.2.0
-- **Database**: MongoDB
-- **Frontend**: Thymeleaf templates with TailwindCSS
-- **Build Tool**: Maven (with Maven Wrapper included)
+---
 
 ## Features
 
-- ✅ Task Management (CRUD operations)
-- ✅ Project Management
-- ✅ Task Search and Filtering
-- ✅ Task Statistics Dashboard
-- ✅ Modern UI with TailwindCSS
-- ✅ Responsive Design
+| Module | Functionality |
+|---|---|
+| **Tasks** | Full CRUD, statuses (Pending / In Progress / Completed), priorities, user assignment, due dates, estimated hours |
+| **Projects** | Create and delete projects; group tasks by project |
+| **Search** | Advanced filtering by title, status, priority, and project |
+| **Reports** | Dashboard with team statistics and metrics |
+| **History** | Automatic change log for tasks |
+| **Notifications** | Per-user notification system |
+| **Comments** | Per-task comment threads |
+| **CSV Export** | Download tasks as `.csv` |
+| **Authentication** | Login/register with Spring Security and BCrypt; `ADMIN` and `USER` roles |
 
-## Quick Start
+---
 
-**See `QUICK_START.md` for the fastest way to get running!**
+## Prerequisites
 
-### Prerequisites
+| Tool | Minimum Version | Notes |
+|---|---|---|
+| **Java JDK** | 17+ | JDK 21 recommended |
+| **Maven** | — | Included as Maven Wrapper (`mvnw` / `mvnw.cmd`) |
+| **MongoDB** | 6.0+ | Via Docker Compose, local install, or MongoDB Atlas (cloud) |
+| **Node.js + npm** | 18+ | Only needed to recompile TailwindCSS |
+| **Docker** *(optional)* | 20+ | To run MongoDB with `docker-compose` |
 
-- ✅ Java 17 or higher (Java 21 detected)
-- MongoDB (see setup options below)
-- Node.js (optional, for TailwindCSS)
+---
 
-### Option 1: Docker (Easiest)
+## Local Setup
 
-1. **Start MongoDB:**
-   ```powershell
-   docker-compose up -d
-   ```
+### 1. Clone the repository
 
-2. **Run the application:**
-   ```powershell
-   .\mvnw.cmd spring-boot:run
-   ```
-   Or use the startup script:
-   ```powershell
-   .\start-app.bat
-   ```
-
-3. **Open browser:** http://localhost:8080
-
-### Option 2: IDE (Recommended for Development)
-
-1. Open project in IntelliJ IDEA / Eclipse / VS Code
-2. Open `src/main/java/com/taskmanager/TaskManagerApplication.java`
-3. Click Run (▶️)
-4. Open browser: http://localhost:8080
-
-### Option 3: Install MongoDB Locally
-
-See `MONGODB_SETUP.md` for detailed instructions.
-
-## Setup Instructions
-
-### 1. MongoDB Setup
-
-Choose one option:
-
-- **Docker** (easiest): `docker-compose up -d`
-- **Local Install**: See `MONGODB_SETUP.md`
-- **MongoDB Atlas** (cloud): See `MONGODB_SETUP.md`
-
-### 2. Run the Application
-
-**With Maven Wrapper (no Maven installation needed):**
-```powershell
-.\mvnw.cmd spring-boot:run
+```bash
+git clone <REPO_URL>
+cd task-manager
 ```
 
-**With IDE:**
-- Simply run `TaskManagerApplication.java`
+### 2. Configure environment variables
 
-**With installed Maven:**
-```powershell
-mvn spring-boot:run
+Copy the template and fill in your values:
+
+```bash
+cp .env.template .env
 ```
 
-### 3. Build TailwindCSS (Optional)
+Edit `.env` with your MongoDB connection string:
 
-The CSS is already built. If you make changes:
+```env
+MONGODB_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/<database>
+SERVER_PORT=8080
+```
 
-```powershell
+> **Important:** The `.env` file contains credentials and **must never be committed to Git**. It is already listed in `.gitignore`.
+
+### 3. Start MongoDB
+
+**Option A — Docker Compose (recommended):**
+
+```bash
+docker-compose up -d
+```
+
+**Option B — MongoDB Atlas (cloud):**
+
+Set your Atlas URI in the `.env` file. No local installation required.
+
+**Option C — Local installation:**
+
+Start the MongoDB service according to your operating system.
+
+### 4. Install frontend dependencies *(optional)*
+
+Only needed if you plan to modify CSS styles:
+
+```bash
 npm install
-.\build-css.bat
 ```
 
-Or use TailwindCSS CDN (uncomment CDN link in templates).
+### 5. Run the application
+
+```bash
+# Windows
+.\mvnw.cmd spring-boot:run
+
+# Linux / macOS
+./mvnw spring-boot:run
+```
+
+The application will be available at: **http://localhost:8080**
+
+---
 
 ## Default Login
 
-The application creates sample data on first run:
-- **Username:** admin
-- **Password:** admin
+Sample users are created automatically on first run:
+
+| Username | Password | Role |
+|---|---|---|
+| `admin` | `admin` | ADMIN |
+| `juan` | `password` | USER |
+| `maria` | `password` | USER |
+
+> **Warning:** Change these passwords in production. Users are only created if the database is empty.
+
+---
 
 ## Project Structure
 
 ```
-src/
-├── main/
-│   ├── java/com/taskmanager/
-│   │   ├── controller/     # Spring MVC Controllers
-│   │   ├── model/          # MongoDB Entity Models
-│   │   ├── repository/     # MongoDB Repositories
-│   │   ├── service/        # Business Logic Services
-│   │   ├── config/         # Configuration (Data Initializer)
-│   │   └── TaskManagerApplication.java
-│   └── resources/
-│       ├── static/
-│       │   ├── css/        # TailwindCSS files
-│       │   └── js/         # JavaScript files
-│       ├── templates/      # Thymeleaf templates
-│       └── application.properties
-└── test/
+├── src/
+│   ├── main/
+│   │   ├── java/com/taskmanager/
+│   │   │   ├── config/          # SecurityConfig, DataInitializer
+│   │   │   ├── controller/      # MVC Controllers (Thymeleaf)
+│   │   │   ├── controller/rest/ # REST API Controllers
+│   │   │   ├── exception/       # GlobalExceptionHandler
+│   │   │   ├── model/           # MongoDB Entities (Task, Project, User…)
+│   │   │   ├── repository/      # Spring Data MongoDB Repositories
+│   │   │   ├── service/         # Business Logic
+│   │   │   └── TaskManagerApplication.java
+│   │   └── resources/
+│   │       ├── static/
+│   │       │   ├── css/         # TailwindCSS (input.css -> output.css)
+│   │       │   └── js/          # Frontend JavaScript
+│   │       ├── templates/       # Thymeleaf templates (.html)
+│   │       └── application.properties
+├── docker-compose.yml           # MongoDB via Docker
+├── pom.xml                      # Maven dependencies
+├── package.json                 # npm dependencies (TailwindCSS)
+├── .env.template                # Environment variable template
+└── .env                         # Environment variables (not versioned)
 ```
 
-## API Endpoints
+---
 
-### Tasks
-- `GET /` - Task list and management page
-- `POST /agregar` - Create new task
-- `POST /actualizar` - Update existing task
-- `POST /eliminar` - Delete task
-- `GET /editar/{id}` - Edit task page
+## Main Endpoints
 
-### Projects
-- `GET /proyectos` - Project list and management page
-- `POST /proyectos/agregar` - Create new project
-- `POST /proyectos/eliminar/{id}` - Delete project
+### Views (Thymeleaf)
 
-### Search
-- `GET /busqueda` - Search tasks with filters
+| Method | Route | Description |
+|---|---|---|
+| `GET` | `/` | Task list and management |
+| `GET` | `/editar/{id}` | Task edit form |
+| `POST` | `/agregar` | Create task |
+| `POST` | `/actualizar` | Update task |
+| `POST` | `/eliminar` | Delete task |
+| `GET` | `/proyectos` | Project management |
+| `GET` | `/busqueda` | Advanced search |
+| `GET` | `/reportes` | Reports dashboard |
+| `GET` | `/historial` | Change history |
+| `GET` | `/notificaciones` | Notifications |
+| `GET` | `/comentarios/{taskId}` | Task comments |
+| `GET` | `/login` | Login page |
+| `GET` | `/register` | Registration page |
 
-## Configuration
+### REST API
 
-Edit `src/main/resources/application.properties` to configure:
-- MongoDB connection settings
-- Server port
-- Thymeleaf settings
+| Method | Route | Description |
+|---|---|---|
+| `GET/POST` | `/api/tasks/**` | Task CRUD (JSON) |
+| `GET/POST` | `/api/projects/**` | Project CRUD (JSON) |
+| `GET` | `/api/users/**` | User queries (JSON) |
 
-## Documentation
+---
 
-- **`QUICK_START.md`** - Fastest way to get running
-- **`MONGODB_SETUP.md`** - MongoDB installation and setup
-- **`MAVEN_SETUP.md`** - Maven installation (if needed)
-- **`SETUP.md`** - TailwindCSS setup
+## Available Scripts
 
-## Troubleshooting
+```bash
+# Start the application (development)
+.\mvnw.cmd spring-boot:run          # Windows
+./mvnw spring-boot:run              # Linux/macOS
 
-### Maven not found
-- Use Maven Wrapper: `.\mvnw.cmd spring-boot:run`
-- Or use an IDE (recommended)
+# Build for production
+.\mvnw.cmd clean package -DskipTests
 
-### MongoDB connection error
-- Make sure MongoDB is running
-- Check: `docker ps` (if using Docker)
-- Verify port 27017 is accessible
+# Build TailwindCSS
+npm run build:css
 
-### Port 8080 already in use
-- Change port in `application.properties`:
-  ```properties
-  server.port=8081
-  ```
+# TailwindCSS watch mode (development)
+npm run dev:css
+
+# Start MongoDB with Docker
+docker-compose up -d
+
+# Stop MongoDB
+docker-compose down
+```
+
+---
+
+## Deployment
+
+The project includes a **Railway** configuration (`railwayl.toml`). To deploy:
+
+1. Set the `MONGODB_URI` environment variable in the Railway dashboard.
+2. Railway will automatically build and deploy using the configured commands.
+
+---
 
 ## License
 
